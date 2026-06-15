@@ -1,4 +1,4 @@
-import 'package:ecommerce_user_app/features/dashbord/presentation/view/otp_verification_page.dart';
+import 'package:ecommerce_user_app/features/auth/presentation/view/otp_verification_page.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {

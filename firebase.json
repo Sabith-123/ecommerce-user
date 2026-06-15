@@ -1,0 +1,60 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "ecommerce-test-54853",
+          "appId": "1:368682073122:android:a51a916e2f9d93f4c31e7b",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "ecommerce-test-54853",
+          "appId": "1:368682073122:ios:3d54b09ceadc59d6c31e7b",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "ecommerce-test-54853",
+          "appId": "1:368682073122:ios:3d54b09ceadc59d6c31e7b",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "ecommerce-test-54853",
+          "configurations": {
+            "android": "1:368682073122:android:a51a916e2f9d93f4c31e7b",
+            "ios": "1:368682073122:ios:3d54b09ceadc59d6c31e7b",
+            "macos": "1:368682073122:ios:3d54b09ceadc59d6c31e7b",
+            "web": "1:368682073122:web:1dd0e1ba2d025a73c31e7b",
+            "windows": "1:368682073122:web:39bb03fe1619fee2c31e7b"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local",
+        "build"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ]
+}
