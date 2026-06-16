@@ -40,16 +40,16 @@ export const verifyMsg91OtpAndGetCustomToken = functions.https.onRequest(
         body = req.body;
       }
 
-      const { msg91Token } = body;
+      const {msg91Token} = body;
 
       if (!msg91Token) {
-        res.status(400).json({ error: "Missing msg91Token" });
+        res.status(400).json({error: "Missing msg91Token"});
         return;
       }
 
       const MSG91_AUTH_KEY = process.env.MSG91_AUTH_KEY || "";
       if (!MSG91_AUTH_KEY) {
-        res.status(500).json({ error: "MSG91_AUTH_KEY not set" });
+        res.status(500).json({error: "MSG91_AUTH_KEY not set"});
         return;
       }
 
@@ -69,10 +69,10 @@ export const verifyMsg91OtpAndGetCustomToken = functions.https.onRequest(
       );
 
       const msg91Data = (await msg91Res.json()) as { message?: string };
-      functions.logger.info("Msg91 response", { msg91Data });
+      functions.logger.info("Msg91 response", {msg91Data});
 
       if (!msg91Res.ok || !msg91Data?.message) {
-        res.status(400).json({ error: "Invalid or expired OTP" });
+        res.status(400).json({error: "Invalid or expired OTP"});
         return;
       }
 
@@ -85,7 +85,7 @@ export const verifyMsg91OtpAndGetCustomToken = functions.https.onRequest(
       } catch (error: unknown) {
         const firebaseError = error as { code?: string };
         if (firebaseError.code === "auth/user-not-found") {
-          userRecord = await admin.auth().createUser({ phoneNumber });
+          userRecord = await admin.auth().createUser({phoneNumber});
           functions.logger.info("Created new Auth user", {
             uid: userRecord.uid,
             phoneNumber,
@@ -108,19 +108,19 @@ export const verifyMsg91OtpAndGetCustomToken = functions.https.onRequest(
           updatedAt: admin.firestore.FieldValue.serverTimestamp(),
         };
         await userDocRef.set(minimalUser);
-        functions.logger.info("Created new user doc", { uid: userRecord.uid });
+        functions.logger.info("Created new user doc", {uid: userRecord.uid});
       }
 
       const firebaseToken = await admin
         .auth()
         .createCustomToken(userRecord.uid);
 
-      res.status(200).json({ firebaseToken, phoneNumber });
+      res.status(200).json({firebaseToken, phoneNumber});
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Internal server error";
       functions.logger.error("Error verifying OTP", err);
-      res.status(500).json({ error: message });
+      res.status(500).json({error: message});
     }
   }
 );

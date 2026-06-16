@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 
@@ -16,6 +17,8 @@ abstract class FirebaseInjectableModule {
   FirebaseStorage get storage => FirebaseStorage.instance;
   @lazySingleton
   FirebaseFirestore get repo => FirebaseFirestore.instance;
+  @lazySingleton
+  FirebaseMessaging get messaging => FirebaseMessaging.instance;
 }
 
 class FirebaseService {
@@ -26,4 +29,3 @@ class FirebaseService {
     return FirebaseService();
   }
 }
-

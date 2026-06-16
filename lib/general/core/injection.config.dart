@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
+import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:firebase_storage/firebase_storage.dart' as _i457;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:image_picker/image_picker.dart' as _i183;
@@ -39,10 +40,12 @@ Future<_i174.GetIt> init(
   gh.lazySingleton<_i974.FirebaseFirestore>(
     () => firebaseInjectableModule.repo,
   );
+  gh.lazySingleton<_i892.FirebaseMessaging>(
+    () => firebaseInjectableModule.messaging,
+  );
   gh.lazySingleton<_i183.ImagePicker>(
     () => generalInjectableModule.imagePicker,
   );
-
   return getIt;
 }
 

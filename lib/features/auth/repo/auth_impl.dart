@@ -86,15 +86,20 @@ class AuthImpl {
       if (respons?['type'] == 'success') {
         // ✅ Use the JWT token returned from Msg91, not the reqId
         final msg91Token = respons?['message'];
+
         // 2. Call Cloud Function
         final uri = Uri.parse(
-          'https://verifymsg91otpandgetcustomtoken-iju6ao4p5a-uc.a.run.app',
+          'https://us-central1-ecommerce-test-54853.cloudfunctions.net/verifyMsg91OtpAndGetCustomToken',
         );
+        log("Calling API: $uri");
+        log("msg91Token: $msg91Token");
         final apiResponse = await http.post(
           uri,
           headers: {'content-type': 'application/json'},
           body: jsonEncode({'msg91Token': msg91Token}),
         );
+        log("Status Code: ${apiResponse.statusCode}");
+        log("Response Body: ${apiResponse.body}");
         if (apiResponse.statusCode == 200) {
           final data = jsonDecode(apiResponse.body);
           log("✅ Received data from API: $data");

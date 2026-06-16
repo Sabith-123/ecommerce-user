@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user_app/features/app_root/presentation/provider/app_root_provider.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/view/auth_screen.dart';
 import 'package:ecommerce_user_app/features/auth/repo/auth_impl.dart';
@@ -14,11 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:sendotp_flutter_sdk/sendotp_flutter_sdk.dart';
 import 'package:toastification/toastification.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await dotenv.load();
   await configureDependencies();
 
   // Initialize MSG91 OTP widget before any sendOtp/verifyOtp use
@@ -43,6 +46,7 @@ void main() async {
             );
           },
         ),
+        ChangeNotifierProvider(create: (context) => AppRootProvider()),
       ],
       child: ToastificationWrapper(child: MyApp()),
     ),
@@ -55,9 +59,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:
-          // AuthScreen()
-          EditProfile(),
+      navigatorKey: navigatorKey,
+      home: AuthScreen(),
+      // EditProfile(),
     );
   }
 }

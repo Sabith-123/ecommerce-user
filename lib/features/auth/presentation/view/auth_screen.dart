@@ -1,5 +1,9 @@
+import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/view/otp_verification_page.dart';
+import 'package:ecommerce_user_app/general/services/easy_navigation.dart';
+import 'package:ecommerce_user_app/general/widgets/show_progress.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -19,17 +23,16 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void loginhandler() async {
+    Future<void> loginhandler(AuthProvider authProvider) async {
       if (formKeys.currentState!.validate()) {
-        if (!context.mounted) return;
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return OtpVerificationPage();
-            },
-          ),
-          (route) => false,
+        showProgress(context);
+        await authProvider.sendOtpFun(
+          onSuccess: () {
+            EasyNavigation.push(context: context, page: OtpVerificationPage());
+          },
+          onError: () {
+            hideProgress(context);
+          },
         );
       }
     }
@@ -64,6 +67,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   SizedBox(height: 15),
 
                   TextFormField(
+                    controller: context.read<AuthProvider>().phoneCtl,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Enter your phone number';
@@ -169,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   SizedBox(height: 30),
                   InkWell(
                     onTap: () {
-                      loginhandler();
+                      loginhandler(context.read<AuthProvider>());
                     },
                     child: Container(
                       height: 44,

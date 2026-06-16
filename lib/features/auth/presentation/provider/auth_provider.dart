@@ -9,22 +9,29 @@ import 'package:flutter/material.dart';
 class AuthProvider extends ChangeNotifier {
   final AuthImpl authImpl;
   AuthProvider(this.authImpl);
-
+  bool isVerifying = false;
+  bool isUpdatingProfile = false;
   String? reqId;
   UserModel? userData;
   StreamSubscription<UserModel?>? userStreamSub;
 
   final TextEditingController phoneCtl = TextEditingController();
   final TextEditingController nameCtl = TextEditingController();
+  final TextEditingController otpCtl = TextEditingController();
 
-  Future<void> sendOtpFun() async {
+  Future<void> sendOtpFun({
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) async {
     final result = await authImpl.sendOtp(phoneCtl.text);
     result.fold(
       (l) {
+        onError.call();
         log(l.errorMsg);
         return CToast.error(msg: l.errorMsg);
       },
       (r) {
+        onSuccess.call();
         reqId = r;
         CToast.success(msg: 'OTP sent successfully');
       },
@@ -49,28 +56,43 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> verifyOtpFun({required String otp}) async {
-    if (reqId == null) {
-      log('requst id is null');
-      CToast.error(msg: 'somethig went wrong request id not found');
-      return;
+  Future<void> verifyOtpFun({
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) async {
+    if (isVerifying) return;
+
+    isVerifying = true;
+    notifyListeners();
+    try {
+      if (reqId == null) {
+        onError.call();
+        log('requst id is null');
+        CToast.error(msg: 'somethig went wrong request id not found');
+        return;
+      }
+      final result = await authImpl.verifyOpt(otpCtl.text, reqId!);
+      result.fold(
+        (l) {
+          onError.call();
+          log(l.errorMsg);
+          CToast.error(msg: l.errorMsg);
+        },
+        (r) {
+          onSuccess.call();
+          log('otp verified successfully');
+        },
+      );
+    } finally {
+      isVerifying = false;
+      notifyListeners();
     }
-    final result = await authImpl.verifyOpt(otp, reqId!);
-    result.fold(
-      (l) {
-        log(l.errorMsg);
-        CToast.error(msg: l.errorMsg);
-      },
-      (r) {
-        log('otp verified successfully');
-      },
-    );
   }
 
   /// After OTP verify,user and general config in parallel, then report success/failure.
   /// Caller can use [user] and [hasName] to decide navigation (e.g. name screen vs home).
   Future<void> checkUserAfterOtp({
-    required Function(UserModel user, bool hasName) onSuccess,
+    required Function(bool hasName) onSuccess,
     required VoidCallback onError,
   }) async {
     try {
@@ -87,7 +109,7 @@ class AuthProvider extends ChangeNotifier {
       return;
     }
     final hasName = (currentUser.name ?? '').trim().isNotEmpty;
-    onSuccess(currentUser, hasName);
+    onSuccess(hasName);
   }
 
   Future<UserModel?> fetchUser() async {
@@ -116,21 +138,30 @@ class AuthProvider extends ChangeNotifier {
     required VoidCallback onSuccess,
     required VoidCallback onError,
   }) async {
-    final trimedName = nameCtl.text.trim();
-    if (trimedName.isEmpty) {
-      CToast.error(msg: 'Please enter your name');
-      return;
+    if (isUpdatingProfile) return;
+    isUpdatingProfile = true;
+    notifyListeners();
+    try {
+      final trimedName = nameCtl.text.trim();
+      if (trimedName.isEmpty) {
+        CToast.error(msg: 'Please enter your name');
+        return;
+      }
+      final result = await authImpl.updateUserName(trimedName);
+      result.fold(
+        (l) {
+          log(l.errorMsg);
+          CToast.error(msg: l.errorMsg);
+        },
+        (r) {
+          onSuccess();
+          notifyListeners();
+        },
+      );
+    } finally {
+      isUpdatingProfile = false;
+      notifyListeners();
     }
-    final result = await authImpl.updateUserName(trimedName);
-    result.fold(
-      (l) {
-        log(l.errorMsg);
-        CToast.error(msg: l.errorMsg);
-      },
-      (r) {
-        onSuccess();
-      },
-    );
   }
 
   Future<void> logOut({
