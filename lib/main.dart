@@ -3,7 +3,8 @@ import 'package:ecommerce_user_app/features/app_root/presentation/provider/app_r
 import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/view/auth_screen.dart';
 import 'package:ecommerce_user_app/features/auth/repo/auth_impl.dart';
-import 'package:ecommerce_user_app/features/profile/presentation/view/edit_profile.dart';
+import 'package:ecommerce_user_app/features/dashbord/presentation/provider/product_provider.dart';
+import 'package:ecommerce_user_app/features/dashbord/repo/product_impl.dart';
 import 'package:ecommerce_user_app/firebase_options.dart';
 import 'package:ecommerce_user_app/general/core/injection.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
@@ -47,6 +48,10 @@ void main() async {
           },
         ),
         ChangeNotifierProvider(create: (context) => AppRootProvider()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              ProductProvider(ProductImpl(sl<FirebaseFirestore>())),
+        ),
       ],
       child: ToastificationWrapper(child: MyApp()),
     ),
@@ -58,10 +63,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      home: AuthScreen(),
-      // EditProfile(),
-    );
+    return MaterialApp(navigatorKey: navigatorKey, home: AuthScreen());
   }
 }

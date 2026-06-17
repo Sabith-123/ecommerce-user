@@ -1,0 +1,118 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user_app/general/utils/app_color.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+class CwProductCard extends StatelessWidget {
+  final String imageUrl;
+  final String productName;
+  final String productSubtitle;
+  final double productPrice;
+  final VoidCallback onTap;
+  final String orginalPrice;
+  const CwProductCard({
+    super.key,
+    required this.imageUrl,
+    required this.productName,
+    required this.productSubtitle,
+    required this.productPrice,
+    required this.onTap,
+    required this.orginalPrice,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 130,
+                placeholder: (context, url) {
+                  return Container(
+                    color: AppColors.white,
+                    child: Center(
+                      child: LoadingAnimationWidget.fallingDot(
+                        color: AppColors.greenColor,
+                        size: 40,
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) => Container(
+                  color: AppColors.primarySoftColor,
+                  child: Icon(Icons.error),
+                ),
+              ),
+            ),
+            Gap(20),
+            Text(
+              productName,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight(600),
+                fontFamily: 'montserrat',
+              ),
+            ),
+            Gap(5),
+            Text(
+              productSubtitle,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight(400),
+                fontFamily: 'montserrat',
+              ),
+            ),
+            Gap(10),
+            Row(
+              children: [
+                Text(
+                  '\$$productPrice',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight(600),
+                    fontFamily: 'montserrat',
+                  ),
+                ),
+                Gap(7),
+                Text(
+                  '\$$orginalPrice',
+                  style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 14,
+                    fontWeight: FontWeight(600),
+                    color: AppColors.subTitleColor,
+                    fontFamily: 'montserrat',
+                  ),
+                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(Icons.add, color: AppColors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

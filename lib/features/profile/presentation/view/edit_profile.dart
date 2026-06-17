@@ -1,5 +1,5 @@
+import 'package:ecommerce_user_app/features/app_root/presentation/view/app_root.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
-import 'package:ecommerce_user_app/features/dashbord/presentation/view/dashbord.dart';
 import 'package:ecommerce_user_app/general/services/easy_navigation.dart';
 import 'package:ecommerce_user_app/general/widgets/cw_text_formfield.dart';
 import 'package:ecommerce_user_app/general/widgets/show_progress.dart';
@@ -45,7 +45,7 @@ class EditProfile extends StatelessWidget {
                                 hideProgress(context);
                                 EasyNavigation.pushAndRemoveUntil(
                                   context: context,
-                                  page: Dashbord(),
+                                  page: AppRoot(),
                                 );
                               },
                               onError: () {

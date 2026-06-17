@@ -1,7 +1,6 @@
 import 'dart:async';
-
+import 'package:ecommerce_user_app/features/app_root/presentation/view/app_root.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
-import 'package:ecommerce_user_app/features/dashbord/presentation/view/dashbord.dart';
 import 'package:ecommerce_user_app/features/profile/presentation/view/edit_profile.dart';
 import 'package:ecommerce_user_app/general/services/easy_navigation.dart';
 import 'package:ecommerce_user_app/general/widgets/show_progress.dart';
@@ -234,9 +233,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                                     if (!mounted) return;
 
                                     if (hasName) {
-                                      EasyNavigation.pushReplacement(
+                                      EasyNavigation.pushAndRemoveUntil(
                                         context: context,
-                                        page: Dashbord(),
+                                        page: AppRoot(),
                                       );
                                     } else {
                                       EasyNavigation.pushAndRemoveUntil(
