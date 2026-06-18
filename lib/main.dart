@@ -3,6 +3,9 @@ import 'package:ecommerce_user_app/features/app_root/presentation/provider/app_r
 import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
 import 'package:ecommerce_user_app/features/auth/presentation/view/auth_screen.dart';
 import 'package:ecommerce_user_app/features/auth/repo/auth_impl.dart';
+import 'package:ecommerce_user_app/features/categories/presentation/provider/categorie_provider.dart';
+import 'package:ecommerce_user_app/features/categories/repo/categorie_impl.dart';
+import 'package:ecommerce_user_app/features/dashbord/presentation/provider/cart_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/presentation/provider/product_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/repo/product_impl.dart';
 import 'package:ecommerce_user_app/firebase_options.dart';
@@ -52,6 +55,11 @@ void main() async {
           create: (context) =>
               ProductProvider(ProductImpl(sl<FirebaseFirestore>())),
         ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              CategorieProvider(CategorieImpl(sl<FirebaseFirestore>())),
+        ),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
       child: ToastificationWrapper(child: MyApp()),
     ),

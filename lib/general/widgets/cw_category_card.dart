@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user_app/general/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CwCategoryCard extends StatelessWidget {
   final String title;
@@ -32,11 +34,26 @@ class CwCategoryCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 height: isGridView ? 120 : 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: AppColors.primarySoftColor,
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  placeholder: (context, url) {
+                    return Container(
+                      color: AppColors.white,
+                      child: Center(
+                        child: LoadingAnimationWidget.inkDrop(
+                          color: AppColors.greenColor,
+                          size: 20,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Center(
+                      child: Icon(Icons.error, color: AppColors.red, size: 20),
+                    );
+                  },
                 ),
               ),
               Gap(10),

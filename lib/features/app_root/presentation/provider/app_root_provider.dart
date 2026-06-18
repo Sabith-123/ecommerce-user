@@ -1,6 +1,7 @@
 import 'package:ecommerce_user_app/features/app_root/data/model/botton_navigation_model.dart';
 import 'package:ecommerce_user_app/features/categories/presentation/view/categories.dart';
 import 'package:ecommerce_user_app/features/dashbord/presentation/view/dashbord.dart';
+import 'package:ecommerce_user_app/features/order_product.dart/presentation/view/cart_order.dart';
 import 'package:flutter/material.dart';
 
 class AppRootProvider extends ChangeNotifier {
@@ -18,7 +19,7 @@ class AppRootProvider extends ChangeNotifier {
       title: "Category",
     ),
     BottonNavigationModel(
-      page: Dashbord(),
+      page: CartOrder(),
       icon: Icons.shopping_cart_outlined,
       title: "Cart",
     ),
