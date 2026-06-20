@@ -5,6 +5,17 @@ import 'package:flutter/material.dart';
 class CartProvider extends ChangeNotifier {
   List<CartModel> cartItemsList = [];
 
+  final int deliveyCharge = 200;
+  final int tax = 18;
+
+  double get subTotal {
+    double totalAmount = 0;
+    for (final i in cartItemsList) {
+      totalAmount = totalAmount + (i.product.sellingPrice * i.quantity);
+    }
+    return totalAmount;
+  }
+
   void addToCart(ProductModel productModelItem) {
     final index = cartItemsList.indexWhere((e) {
       return e.product.id == productModelItem.id;

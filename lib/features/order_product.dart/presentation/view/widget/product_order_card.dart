@@ -3,7 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class ProductOrderCard extends StatelessWidget {
-  const ProductOrderCard({super.key});
+  final String image;
+  final String productName;
+  final String price;
+  final String variantId;
+  final VoidCallback onIncrement;
+  final VoidCallback onDecrement;
+  final int quantity;
+  const ProductOrderCard({
+    super.key,
+    required this.image,
+    required this.productName,
+    required this.price,
+    required this.variantId,
+    required this.onIncrement,
+    required this.onDecrement,
+    required this.quantity,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +54,9 @@ class ProductOrderCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("product name"),
-                      Text('500 g'),
-                      Text("\$35"),
+                      Text(productName),
+                      Text(variantId),
+                      Text('\$$price'),
                     ],
                   ),
                 ),
@@ -61,7 +77,7 @@ class ProductOrderCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () {},
+                            onTap: onDecrement,
                             child: Icon(
                               Icons.remove,
                               color: AppColors.white,
@@ -69,7 +85,7 @@ class ProductOrderCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '1',
+                            quantity.toString(),
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight(600),
@@ -78,7 +94,7 @@ class ProductOrderCard extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: onIncrement,
                             child: Icon(
                               Icons.add,
                               color: AppColors.white,
