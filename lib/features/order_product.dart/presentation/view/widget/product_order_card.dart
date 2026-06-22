@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user_app/general/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ProductOrderCard extends StatelessWidget {
   final String image;
@@ -37,12 +39,29 @@ class ProductOrderCard extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.center,
-                child: Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.amber,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: CachedNetworkImage(
+                    height: 60,
+                    width: 60,
+                    imageUrl: image,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) {
+                      return Container(
+                        color: AppColors.white,
+                        child: Center(
+                          child: LoadingAnimationWidget.fallingDot(
+                            color: AppColors.greenColor,
+                            size: 40,
+                          ),
+                        ),
+                      );
+                    },
+
+                    errorWidget: (context, url, error) => Container(
+                      color: AppColors.primarySoftColor,
+                      child: Icon(Icons.error),
+                    ),
                   ),
                 ),
               ),

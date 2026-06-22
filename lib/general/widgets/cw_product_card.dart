@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_user_app/features/dashbord/presentation/provider/cart_provider.dart';
 import 'package:ecommerce_user_app/general/utils/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
 
 class CwProductCard extends StatelessWidget {
   final String imageUrl;

@@ -1,4 +1,6 @@
+import 'package:ecommerce_user_app/features/auth/presentation/provider/auth_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/presentation/provider/cart_provider.dart';
+import 'package:ecommerce_user_app/features/order_product.dart/presentation/provider/order_provider.dart';
 import 'package:ecommerce_user_app/features/order_product.dart/presentation/view/widget/bill_summary.dart';
 import 'package:ecommerce_user_app/features/order_product.dart/presentation/view/widget/product_order_card.dart';
 import 'package:ecommerce_user_app/general/utils/app_color.dart';
@@ -77,8 +79,16 @@ class CartOrder extends StatelessWidget {
                               .cartItemsList[index]
                               .product
                               .variantId,
-                          onIncrement: () {},
-                          onDecrement: () {},
+                          onIncrement: () {
+                            cartProvider.addToCart(
+                              cartProvider.cartItemsList[index].product,
+                            );
+                          },
+                          onDecrement: () {
+                            cartProvider.removeFromCart(
+                              cartProvider.cartItemsList[index].product,
+                            );
+                          },
                           quantity: cartProvider.cartItemsList[index].quantity,
                         ),
                       );
@@ -224,7 +234,19 @@ class CartOrder extends StatelessWidget {
                     ),
                   ),
                   Gap(20),
-                  CwButton(title: 'Place Order', onTap: () {}),
+                  CwButton(
+                    title: 'Place Order',
+                    onTap: () {
+                      context.read<OrderProvider>().createOrderFun(
+                        userId: context.read<AuthProvider>().userData!.id!,
+                        address: 'kozhikode kerala 673601',
+                        cartProvider: cartProvider,
+                      );
+                    },
+                    isLoading: context
+                        .watch<OrderProvider>()
+                        .isCreateOrderLoading,
+                  ),
                   Gap(20),
                 ],
               );

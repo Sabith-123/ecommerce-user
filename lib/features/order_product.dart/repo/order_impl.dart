@@ -17,10 +17,33 @@ class OrderImpl {
       // Firestore generates unique document id
       final docRef = firestore.collection(FirebaseCollections.orders).doc();
       // Add generated order id to model
-      final result = orderMOdel.copyWith(orderId: docRef.id);
+      final result = orderMOdel.copyWith(
+        orderId: docRef.id,
+        orderStatus: 'pending',
+      );
       // Save order in Firestore
       await docRef.set(result.toMap());
       return right(result);
+    } catch (e) {
+      log(e.toString());
+      return left(MainFailure.serverFailure(errorMsg: e.toString()));
+    }
+  }
+
+  FutureResult<List<OrderModel>> fetchOrderDetails({
+    required String userId,
+  }) async {
+    try {
+      final snapShort = await firestore
+          .collection(FirebaseCollections.orders)
+          .where('userId', isEqualTo: userId)
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      final order = snapShort.docs.map((e) {
+        return OrderModel.fromMap(e.data());
+      }).toList();
+      return right(order);
     } catch (e) {
       log(e.toString());
       return left(MainFailure.serverFailure(errorMsg: e.toString()));

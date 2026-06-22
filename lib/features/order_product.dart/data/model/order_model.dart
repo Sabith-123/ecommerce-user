@@ -62,7 +62,7 @@ class OrderModel {
       "totalAmount": totalAmount,
       "orderStatus": orderStatus,
       "items": items,
-      "createdAt": FieldValue.serverTimestamp(),
+      "createdAt": createdAt ?? FieldValue.serverTimestamp(),
       "address": address,
     };
   }

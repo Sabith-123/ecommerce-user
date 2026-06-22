@@ -8,6 +8,8 @@ import 'package:ecommerce_user_app/features/categories/repo/categorie_impl.dart'
 import 'package:ecommerce_user_app/features/dashbord/presentation/provider/cart_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/presentation/provider/product_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/repo/product_impl.dart';
+import 'package:ecommerce_user_app/features/order_product.dart/presentation/provider/order_provider.dart';
+import 'package:ecommerce_user_app/features/order_product.dart/repo/order_impl.dart';
 import 'package:ecommerce_user_app/firebase_options.dart';
 import 'package:ecommerce_user_app/general/core/injection.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
@@ -60,6 +62,10 @@ void main() async {
               CategorieProvider(CategorieImpl(sl<FirebaseFirestore>())),
         ),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              OrderProvider(OrderImpl(sl<FirebaseFirestore>())),
+        ),
       ],
       child: ToastificationWrapper(child: MyApp()),
     ),

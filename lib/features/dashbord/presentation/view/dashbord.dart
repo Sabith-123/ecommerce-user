@@ -2,6 +2,8 @@ import 'package:ecommerce_user_app/features/categories/data/model/categorie_mode
 import 'package:ecommerce_user_app/features/categories/presentation/provider/categorie_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/presentation/provider/cart_provider.dart';
 import 'package:ecommerce_user_app/features/dashbord/presentation/provider/product_provider.dart';
+import 'package:ecommerce_user_app/features/view_order/presentation/view/view_order.dart';
+import 'package:ecommerce_user_app/general/services/easy_navigation.dart';
 import 'package:ecommerce_user_app/general/utils/app_color.dart';
 import 'package:ecommerce_user_app/general/widgets/cw_category_card.dart';
 import 'package:ecommerce_user_app/general/widgets/cw_product_card.dart';
@@ -50,12 +52,28 @@ class _DashbordState extends State<Dashbord> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Gap(20),
-                    CwSearchBox(
-                      hintText: 'Search',
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: AppColors.blackColor,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CwSearchBox(
+                            hintText: 'Search',
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: AppColors.blackColor,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        IconButton(
+                          onPressed: () {
+                            EasyNavigation.push(
+                              context: context,
+                              page: ViewOrder(),
+                            );
+                          },
+                          icon: Icon(Icons.delivery_dining, size: 40),
+                        ),
+                      ],
                     ),
                     Gap(20),
                     SizedBox(
